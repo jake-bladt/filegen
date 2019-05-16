@@ -2,7 +2,7 @@
   "profiles": {
     "genfiles": {
       "commandName": "Project",
-      "commandLineArgs": "10000"
+      "commandLineArgs": "1000 C:\\code\\notcode\\genfiles"
     }
   }
 }

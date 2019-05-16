@@ -6,13 +6,14 @@ namespace genfiles
     {
         static void Main(string[] args)
         {
-            if (args.Length < 1)
+            if (args.Length < 2)
             {
                 Usage();
                 return;
             }
 
-            var rootDir = args[0];
+            var kbCount = Int64.Parse(args[0]);
+            var rootDir = args[1];
 
             var wordSource = new WordlistStore(@"wordsets\engwords.txt");
             var gen = new PdfGenerator(wordSource.GetWordlst());
@@ -22,7 +23,7 @@ namespace genfiles
         public static void Usage()
         {
             Console.WriteLine("To launch this script, use the following form:");
-            Console.WriteLine("  genfiles root-directory");
+            Console.WriteLine("  genfiles kb-count root-directory");
         }
 
     }

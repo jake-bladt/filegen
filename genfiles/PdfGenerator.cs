@@ -36,18 +36,30 @@ namespace genfiles
             doc.Open();
             var sb = new StringBuilder();
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 128; i++)
             {
-                sb.Append(GetRandomSentence(12));
-                if (i < 3) sb.Append(" ");
+                var para = GetRandomParagraph(4);
+                doc.Add(new Paragraph(para));
             }
-            doc.Add(new Paragraph(sb.ToString()));
 
             doc.Close();
             writer.Close();
             stream.Close();
 
             return false;
+        }
+
+        public string GetRandomParagraph(int sentenceCount)
+        {
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < sentenceCount; i++)
+            {
+                sb.Append(GetRandomSentence(12));
+                if (i < sentenceCount - 1) sb.Append(" ");
+            }
+
+            return sb.ToString();
         }
 
         public string GetRandomSentence(int wordCount)
@@ -62,6 +74,7 @@ namespace genfiles
             }
 
             sb.Append(".");
+            sb.Append('\n');
             return sb.ToString();
 
         }
