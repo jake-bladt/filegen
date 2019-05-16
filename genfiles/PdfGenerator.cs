@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -33,13 +34,36 @@ namespace genfiles
             var writer = PdfWriter.GetInstance(doc, stream);
 
             doc.Open();
-            doc.Add(new Paragraph("Secret and Confidential."));
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < 4; i++)
+            {
+                sb.Append(GetRandomSentence(12));
+                if (i < 3) sb.Append(" ");
+            }
+            doc.Add(new Paragraph(sb.ToString()));
 
             doc.Close();
             writer.Close();
             stream.Close();
 
             return false;
+        }
+
+        public string GetRandomSentence(int wordCount)
+        {
+            var sb = new StringBuilder("The");
+            var rng = new Random();
+            for (int i = 0; i < wordCount; i++)
+            {
+                sb.Append(" ");
+                var seed = rng.NextDouble() * _wordList.Length;
+                sb.Append(_wordList[(int)seed]);
+            }
+
+            sb.Append(".");
+            return sb.ToString();
+
         }
 
     }

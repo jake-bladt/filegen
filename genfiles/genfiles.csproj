@@ -10,4 +10,10 @@
     <PackageReference Include="iTextSharp" Version="5.5.13" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="wordsets\engwords.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

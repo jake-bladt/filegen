@@ -14,10 +14,10 @@ namespace genfiles
 
             var rootDir = args[0];
 
-            var gen = new PdfGenerator(new String[0]);
+            var wordSource = new WordlistStore(@"wordsets\engwords.txt");
+            var gen = new PdfGenerator(wordSource.GetWordlst());
             gen.GenerateRandomPdf(@"C:\code\notcode\gen.pdf", 10000);
         }
-
 
         public static void Usage()
         {
