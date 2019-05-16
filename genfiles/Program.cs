@@ -14,8 +14,8 @@ namespace genfiles
 
             var rootDir = args[0];
 
-
-            Console.WriteLine("Hello World!");
+            var gen = new PdfGenerator(new String[0]);
+            gen.GenerateRandomPdf(@"C:\code\notcode\gen.pdf", 10000);
         }
 
 
