@@ -12,18 +12,21 @@ namespace genfiles
                 return;
             }
 
-            var kbCount = Int64.Parse(args[0]);
+            var kbCount = Int32.Parse(args[0]) * 1024;
             var rootDir = args[1];
 
             var wordSource = new WordlistStore(@"wordsets\engwords.txt");
-            var gen = new PdfGenerator(wordSource.GetWordlst());
-            gen.GenerateRandomPdf(@"C:\code\notcode\gen.pdf", 10000);
+            var textGen = new TextGenerator(wordSource.GetWordlst(), 500);
+            var gen = new PdfGenerator(textGen);
+            gen.GenerateRandomPdfs(rootDir, kbCount, Console.WriteLine);
+
+            Console.ReadLine();
         }
 
         public static void Usage()
         {
             Console.WriteLine("To launch this script, use the following form:");
-            Console.WriteLine("  genfiles kb-count root-directory");
+            Console.WriteLine("  genfiles Mb-count root-directory");
         }
 
     }

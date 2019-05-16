@@ -9,17 +9,48 @@ namespace genfiles
 {
     public class PdfGenerator
     {
-
-        protected readonly string[] _wordList;
-
-        public PdfGenerator(string[] wordList)
+        public class Plan
         {
-            _wordList = wordList;
+            public int Files { get; set; }
+            public int Directories { get; set; }
+            public int Depth { get; set; }
         }
-        
-        public bool GenerateRandomPdfs(string rootDir, long targetBytes, int targetChars)
+
+        public static readonly int TargetParagraphLength = 500;
+        public static readonly int TargetHandleCountPerDirectory = 500;
+        public static int AverageFileSize = 120;
+
+        protected readonly TextGenerator _textGen;
+
+        public PdfGenerator(TextGenerator textGen)
         {
-            
+            _textGen = textGen;
+        }
+
+        public Plan GetPlan(int targetBytes)
+        {
+            var files = targetBytes / AverageFileSize + 1;
+            var dirs = files / TargetHandleCountPerDirectory + 1;
+            var depth = dirs / TargetHandleCountPerDirectory + 1;
+
+            return new Plan
+            {
+                Files = files,
+                Directories = dirs,
+                Depth = depth
+            };
+        }
+
+        public string GetNextFileName(Plan plan, string rootPath, string lastFileName)
+        {
+
+        }
+
+        public bool GenerateRandomPdfs(string rootDir, int targetKBytes, Action<String> outputFn)
+        {
+            var plan = GetPlan(targetKBytes);
+            outputFn($"Generating {plan.Files:#,##0} file(s) in {plan.Directories:#,##0} directories to a depth of {plan.Depth}.");
+
 
 
             return false;
@@ -30,15 +61,16 @@ namespace genfiles
             var charsLeft = targetChars;
 
             var doc = new Document(PageSize.LETTER, 10, 10, 10, 10);
-            var stream = new FileStream(path, FileMode.OpenOrCreate);
+            var stream = new FileStream(path, FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, stream);
 
             doc.Open();
-            var sb = new StringBuilder();
 
-            for (int i = 0; i < 128; i++)
+            var slack = targetChars * 0.01;
+            while (charsLeft > slack)
             {
-                var para = GetRandomParagraph(4);
+                var para = _textGen.GetRandomParagraph(charsLeft);
+                charsLeft -= para.Length;
                 doc.Add(new Paragraph(para));
             }
 
@@ -49,35 +81,6 @@ namespace genfiles
             return false;
         }
 
-        public string GetRandomParagraph(int sentenceCount)
-        {
-            var sb = new StringBuilder();
-
-            for (int i = 0; i < sentenceCount; i++)
-            {
-                sb.Append(GetRandomSentence(12));
-                if (i < sentenceCount - 1) sb.Append(" ");
-            }
-
-            return sb.ToString();
-        }
-
-        public string GetRandomSentence(int wordCount)
-        {
-            var sb = new StringBuilder("The");
-            var rng = new Random();
-            for (int i = 0; i < wordCount; i++)
-            {
-                sb.Append(" ");
-                var seed = rng.NextDouble() * _wordList.Length;
-                sb.Append(_wordList[(int)seed]);
-            }
-
-            sb.Append(".");
-            sb.Append('\n');
-            return sb.ToString();
-
-        }
 
     }
 }
