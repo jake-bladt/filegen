@@ -31,7 +31,7 @@ namespace genfiles
         {
             var files = targetBytes / AverageFileSize + 1;
             var dirs = files / TargetHandleCountPerDirectory + 1;
-            var depth = dirs / TargetHandleCountPerDirectory + 1;
+            var depth = (int)Math.Log(dirs, TargetHandleCountPerDirectory) + 1;
 
             return new Plan
             {
@@ -42,6 +42,29 @@ namespace genfiles
         }
 
         public string GetNextFileName(Plan plan, string rootPath, string lastFileName)
+        {
+            var newDir = String.IsNullOrEmpty(lastFileName);
+            string lastPath;
+
+            if (!newDir)
+            {
+                lastPath = Path.GetFullPath(lastFileName);
+                var lastPathFileCount = new DirectoryInfo(lastPath).GetFiles().Length;
+                if (lastPathFileCount >= TargetHandleCountPerDirectory) newDir = true;
+            }
+
+            if (newDir)
+            {
+
+            }
+            else
+            {
+
+            }
+
+        }
+
+        public string GetNextDirectoryName(Plan plan, string currentDirName)
         {
 
         }
