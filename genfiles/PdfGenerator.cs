@@ -20,10 +20,12 @@ namespace genfiles
         public static readonly int TargetHandleCountPerDirectory = 500;
         public static int AverageFileSize = 120;
 
+        public readonly string _rootPath;
         protected readonly TextGenerator _textGen;
 
-        public PdfGenerator(TextGenerator textGen)
+        public PdfGenerator(string rootPath, TextGenerator textGen)
         {
+            _rootPath = rootPath;
             _textGen = textGen;
         }
 
@@ -66,6 +68,7 @@ namespace genfiles
 
         public string GetNextDirectoryName(Plan plan, string currentDirName)
         {
+            // All file paths are at max depth. All paths above max depth are folders only
 
         }
 
